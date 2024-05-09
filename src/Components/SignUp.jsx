@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import Wave from "../Assets/Images/Png/Wave.png";
 
 function SignUp() {
-  const [FomeValue, setFomeValue] = useState([
-    { name: "", email: "", number: "", password: "" },
-  ]);
+  const [FomeValue, setFomeValue] = useState({
+    name: "",
+    email: "",
+    number: "",
+    password: "",
+  });
   const inputValues = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -22,7 +25,7 @@ function SignUp() {
 
     fetch("http://localhost:8000/movie/signUp", {
       method: "POST",
-      Headers: {
+      headers: {
         Accept: "application/json",
         "content-type": "application/json",
       },

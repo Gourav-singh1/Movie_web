@@ -3,15 +3,28 @@ import Wave from "../Assets/Images/Png/Wave.png";
 import { Link } from "react-router-dom";
 
 function LoginPage() {
-  const [FomeValue, setFomeValue] = useState([{ email: "", password: "" }]);
+  const [FomeValue, setFomeValue] = useState({ email: "", password: "" });
   const inputValues = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setFomeValue([...FomeValue]);
+    setFomeValue({ ...FomeValue, [name]: value });
   };
 
   const loginForm = (e) => {
     e.preventDefault();
+    const loginId = FomeValue;
+    fetch("http://localhost:8000/movie/login", {
+      method: "Post",
+      headers: {
+        Accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(loginId),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.message);
+      });
   };
   return (
     <>
@@ -35,11 +48,12 @@ function LoginPage() {
                 type="text"
                 className="rounded-lg py-3 px-4 w-full bg-[#224957] outline-none border-0 Form_placeholder text-white mt-6"
                 required
-                name="Password"
+                name="password"
                 value={FomeValue.password}
                 onChange={inputValues}
                 placeholder="Password"
               />
+          
               <div className="flex justify-center items-center mt-6">
                 <input
                   type="checkbox"

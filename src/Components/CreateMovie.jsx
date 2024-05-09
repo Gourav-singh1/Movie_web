@@ -4,6 +4,43 @@ import Wave from "../Assets/Images/Png/Wave.png";
 
 function CreateMovie() {
   const [Images, setImages] = useState(false);
+  const [createData, setCreateData] = useState({
+    title: "",
+    year: "",
+  });
+  const sendData = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setCreateData({ ...createData, [name]: value });
+  };
+
+  const SumbitMovie = (e) => {
+    e.preventDefault();
+    setCreateData({
+      title: "",
+      year: "",
+    });
+    setImages(false);
+
+    // const movieName = createData;
+    const movieName = { ...createData, file: Images };
+    fetch("http://localhost:8000/movies/profile", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(movieName),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <>
       <section className=" relative">
@@ -11,7 +48,7 @@ function CreateMovie() {
           <h2 className=" text-white ff_Montserrat text-3xl sm:text-5xl font-semibold">
             Create a new movie
           </h2>
-          <form>
+          <form onSubmit={SumbitMovie}>
             <div className="mt-6 md:mt-20 sm:flex justify-between">
               <div>
                 {Images && (
@@ -21,7 +58,7 @@ function CreateMovie() {
                     alt="movie image"
                   />
                 )}
-                {Images == false ? (
+                {Images === false ? (
                   <div className="">
                     <label
                       htmlFor="AddImage"
@@ -44,12 +81,20 @@ function CreateMovie() {
               </div>
               <div className=" sm:w-96 mt-4 sm:mt-0">
                 <input
+                  required
                   type="text"
+                  name="title"
+                  value={createData.title}
+                  onChange={sendData}
                   className="rounded-lg py-3 px-4 w-full bg-[#224957] outline-none border-0 Form_placeholder text-white"
                   placeholder="Title"
                 />
                 <input
+                  required
                   type="text"
+                  name="year"
+                  value={createData.year}
+                  onChange={sendData}
                   className="rounded-lg py-3 px-4 w-full sm:w-auto bg-[#224957] outline-none border-0 Form_placeholder text-white mt-6"
                   placeholder="Publishing year"
                 />
