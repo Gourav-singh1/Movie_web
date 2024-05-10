@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Wave from "../Assets/Images/Png/Wave.png";
 import { Link } from "react-router-dom";
+import { MyContext } from "./ContextUse";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AddMovie() {
+  const { Done } = useContext(MyContext);
+  if (Done === true) {
+    toast("login");
+  }
   return (
     <>
       <div className="px-4">
@@ -22,6 +29,7 @@ function AddMovie() {
           alt="Wave"
         />
       </div>
+      <ToastContainer />
     </>
   );
 }

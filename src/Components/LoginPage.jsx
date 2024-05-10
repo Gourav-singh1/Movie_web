@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Wave from "../Assets/Images/Png/Wave.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { MyContext } from "./ContextUse";
 
 function LoginPage() {
+  const { setDone } = useContext(MyContext);
+  let history = useNavigate();
   const [FomeValue, setFomeValue] = useState({ email: "", password: "" });
   const inputValues = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     setFomeValue({ ...FomeValue, [name]: value });
   };
-
   const loginForm = (e) => {
     e.preventDefault();
     const loginId = FomeValue;
@@ -24,6 +28,12 @@ function LoginPage() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data.message);
+        if (data.message === "Login Successfully") {
+          history("/AddMovie");
+          setDone(true)
+        } else {
+          toast(data.message);
+        }
       });
   };
   return (
@@ -53,7 +63,7 @@ function LoginPage() {
                 onChange={inputValues}
                 placeholder="Password"
               />
-          
+
               <div className="flex justify-center items-center mt-6">
                 <input
                   type="checkbox"
@@ -88,6 +98,7 @@ function LoginPage() {
         src={Wave}
         alt="Wave"
       />
+      <ToastContainer />
     </>
   );
 }
